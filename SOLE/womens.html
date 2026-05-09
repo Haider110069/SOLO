@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Women's Collection - SOLÉ Premium Footwear</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --gold: #ffcc00;
+    --red: #ff4444;
+    --grey: #1a1a1a;
+    --light-grey: #cccccc;
+    --bright-gold: #ffdd00;
+    --bright-white: #ffffff;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Cormorant Garamond', serif; overflow-x: hidden; cursor: none; }
+
+  .cursor { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
+  .cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(201,168,76,.6); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 24px 64px; background: linear-gradient(to bottom, rgba(10,10,10,.95), transparent); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .35em; color: var(--white); text-decoration: none; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-family: 'Space Mono', monospace; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--bright-white); text-decoration: none; transition: color .3s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-bag { font-family: 'Space Mono', monospace; font-size: .65rem; letter-spacing: .15em; color: var(--black); background: var(--gold); border: none; padding: 10px 24px; cursor: none; font-weight: 700; transition: background .3s; }
+  .nav-bag:hover { background: var(--white); }
+
+  .page-header { padding: 120px 64px 60px; text-align: center; }
+  .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem,6vw,5rem); letter-spacing: .04em; color: var(--white); margin-bottom: 16px; }
+  .page-subtitle { font-size: 1.2rem; color: var(--bright-white); max-width: 600px; margin: 0 auto; }
+
+  .products-section { padding: 60px 64px; }
+  .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+  .product-card { position: relative; overflow: hidden; background: var(--grey); cursor: none; border-radius: 8px; }
+  .product-img-wrap { overflow: hidden; position: relative; height: 350px; }
+  .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; display: block; }
+  .product-card:hover .product-img-wrap img { transform: scale(1.07); }
+  .img-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.75) 0%, transparent 55%); }
+  .product-badge { position: absolute; top: 18px; left: 18px; z-index: 2; font-family: 'Space Mono', monospace; font-size: .52rem; letter-spacing: .2em; padding: 5px 12px; text-transform: uppercase; }
+  .badge-new { background: var(--gold); color: var(--black); }
+  .badge-hot { background: var(--red); color: var(--white); }
+  .product-info { padding: 24px; }
+  .p-name { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 400; color: var(--white); margin-bottom: 8px; }
+  .p-sub { font-family: 'Space Mono', monospace; font-size: .55rem; letter-spacing: .15em; color: var(--bright-white); margin-bottom: 12px; }
+  .p-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--gold); letter-spacing: .05em; margin-bottom: 16px; }
+  .p-add { width: 100%; padding: 14px; background: var(--gold); color: var(--black); border: none; font-family: 'Space Mono', monospace; font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; cursor: none; transition: all .3s; }
+  .p-add:hover { background: var(--bright-white); transform: translateY(-2px); }
+
+  /* Shopping Cart Modal */
+  .cart-modal { position: fixed; top: 0; right: -100%; width: 400px; height: 100vh; background: var(--black); z-index: 1000; transition: right 0.3s ease; box-shadow: -5px 0 20px rgba(0,0,0,0.5); }
+  .cart-modal.active { right: 0; }
+  .cart-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: rgba(0,0,0,0.7); z-index: 999; display: none; }
+  .cart-overlay.active { display: block; }
+  .cart-header { padding: 24px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+  .cart-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--white); }
+  .cart-close { background: none; border: none; color: var(--bright-white); font-size: 1.5rem; cursor: pointer; transition: color 0.3s; }
+  .cart-close:hover { color: var(--gold); }
+  .cart-items { padding: 24px; max-height: calc(100vh - 200px); overflow-y: auto; }
+  .cart-item { display: flex; gap: 16px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #333; }
+  .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 4px; }
+  .cart-item-details { flex: 1; }
+  .cart-item-name { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--white); margin-bottom: 4px; }
+  .cart-item-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--gold); }
+  .cart-item-quantity { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .quantity-btn { width: 24px; height: 24px; border: 1px solid var(--gold); background: none; color: var(--gold); cursor: pointer; transition: all 0.3s; }
+  .quantity-btn:hover { background: var(--gold); color: var(--black); }
+  .quantity-display { font-family: 'Space Mono', monospace; color: var(--bright-white); }
+  .cart-item-remove { background: var(--red); color: var(--white); border: none; padding: 4px 8px; font-size: 0.8rem; cursor: pointer; transition: background 0.3s; }
+  .cart-item-remove:hover { background: #ff6666; }
+  .cart-empty { text-align: center; padding: 40px; color: var(--bright-white); }
+  .cart-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 24px; border-top: 1px solid #333; background: var(--black); }
+  .cart-total { display: flex; justify-content: space-between; margin-bottom: 16px; font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--white); }
+  .cart-total-price { color: var(--gold); }
+  .cart-actions { display: flex; gap: 12px; }
+  .cart-btn { flex: 1; padding: 12px; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.3s; }
+  .cart-checkout { background: var(--gold); color: var(--black); }
+  .cart-checkout:hover { background: var(--bright-white); }
+  .cart-continue { background: transparent; color: var(--bright-white); border: 1px solid var(--bright-white); }
+  .cart-continue:hover { background: var(--bright-white); color: var(--black); }
+
+  /* WhatsApp Button */
+  .whatsapp-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 4px 20px rgba(37,211,102,0.4); transition: all 0.3s; text-decoration: none; }
+  .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(37,211,102,0.6); }
+  .whatsapp-icon { width: 30px; height: 30px; fill: white; }
+
+  /* Success Message */
+  .success-message { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--gold); color: var(--black); padding: 24px 32px; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; z-index: 3000; display: none; box-shadow: 0 10px 40px rgba(255,204,0,0.4); }
+  .success-message.show { display: block; animation: successPulse 0.5s ease; }
+
+  /* Footer Styles */
+  footer { padding: 60px 64px 30px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; padding-bottom: 50px; border-bottom: 1px solid #1a1a1a; }
+  .f-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: .3em; color: var(--white); display: block; margin-bottom: 12px; }
+  .f-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--bright-white); line-height: 1.6; margin-bottom: 8px; }
+  .f-heading { font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .3em; color: var(--gold); text-transform: uppercase; margin-bottom: 18px; }
+  .f-links { list-style: none; }
+  .f-links li { margin-bottom: 8px; }
+  .f-links a { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--bright-white); text-decoration: none; transition: color .3s; }
+  .f-links a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; }
+  .f-copy { font-family: 'Space Mono', monospace; font-size: .55rem; letter-spacing: .15em; color: var(--bright-white); }
+  .f-socials { display: flex; gap: 22px; }
+  .f-socials a { font-family: 'Space Mono', monospace; font-size: .55rem; letter-spacing: .15em; color: var(--bright-white); text-decoration: none; transition: color .3s; }
+  .f-socials a:hover { color: var(--gold); }
+
+  @keyframes successPulse {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; } .nav-links { display: none; }
+    .page-header { padding: 80px 24px 40px; }
+    .products-section { padding: 40px 24px; }
+    .products-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    .cart-modal { width: 100%; right: -100%; }
+    .cursor, .cursor-ring { display: none; }
+    body { cursor: auto; }
+    button, a { cursor: pointer; }
+  }
+
+  @media (max-width: 600px) {
+    .page-title { font-size: clamp(2.5rem,8vw,4rem); }
+    .products-grid { grid-template-columns: 1fr; }
+    .product-img-wrap { height: 280px; }
+    .whatsapp-float { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+    .whatsapp-icon { width: 25px; height: 25px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Shopping Cart Modal -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-modal" id="cartModal">
+  <div class="cart-header">
+    <h3 class="cart-title">SHOPPING CART</h3>
+    <button class="cart-close" id="cartClose">×</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">Your cart is empty</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span>TOTAL:</span>
+      <span class="cart-total-price" id="cartTotal">$0</span>
+    </div>
+    <div class="cart-actions">
+      <button class="cart-btn cart-continue" id="cartContinue">Continue Shopping</button>
+      <button class="cart-btn cart-checkout" id="cartCheckout">Checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/923148905818" target="_blank" class="whatsapp-float">
+  <svg class="whatsapp-icon" viewBox="0 0 24 24">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.123-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</a>
+
+<!-- Success Message -->
+<div class="success-message" id="successMessage">
+  Product added to cart!
+</div>
+
+<nav>
+  <a href="shoes-store.html" class="nav-logo">SOLÉ</a>
+  <ul class="nav-links">
+    <li><a href="mens.html">Men</a></li>
+    <li><a href="womens.html">Women</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="nav-bag">Bag (0)</button>
+</nav>
+
+<section class="page-header">
+  <h1 class="page-title">WOMEN'S COLLECTION</h1>
+  <p class="page-subtitle">Elegant and stylish footwear designed for the modern woman who values comfort and fashion.</p>
+</section>
+
+<section class="products-section">
+  <div class="products-grid">
+    <div class="product-card">
+      <span class="product-badge badge-new">New</span>
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80" alt="Altitude Heel">
+        <div class="img-overlay"></div>
+      </div>
+      <div class="product-info">
+        <h3 class="p-name">Altitude Heel</h3>
+        <p class="p-sub">ELEGANT · PREMIUM LEATHER</p>
+        <p class="p-price">$245</p>
+        <button class="p-add" onclick="addToCart(1)">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-hot">Bestseller</span>
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80" alt="Classic Pump">
+        <div class="img-overlay"></div>
+      </div>
+      <div class="product-info">
+        <h3 class="p-name">Classic Pump</h3>
+        <p class="p-sub">TIMELESS · COMFORT FIT</p>
+        <p class="p-price">$189</p>
+        <button class="p-add" onclick="addToCart(2)">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1556906781-9a412961a28b?w=900&q=80" alt="Sport Luxe">
+        <div class="img-overlay"></div>
+      </div>
+      <div class="product-info">
+        <h3 class="p-name">Sport Luxe</h3>
+        <p class="p-sub">ATHLETIC · FASHION FORWARD</p>
+        <p class="p-price">$225</p>
+        <button class="p-add" onclick="addToCart(3)">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-new">New</span>
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&q=80" alt="Ballet Flat">
+        <div class="img-overlay"></div>
+      </div>
+      <div class="product-info">
+        <h3 class="p-name">Ballet Flat</h3>
+        <p class="p-sub">CASUAL · EVERYDAY COMFORT</p>
+        <p class="p-price">$159</p>
+        <button class="p-add" onclick="addToCart(4)">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80" alt="Designer Boot">
+        <div class="img-overlay"></div>
+      </div>
+      <div class="product-info">
+        <h3 class="p-name">Designer Boot</h3>
+        <p class="p-sub">WINTER · LUXURY EDITION</p>
+        <p class="p-price">$329</p>
+        <button class="p-add" onclick="addToCart(5)">Add to Cart</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-hot">Hot</span>
+      <div class="product-img-wrap">
+        <img src="https://images.unsplash.com/photo-1571559372703-299cb2687b27?w=600&q=80" alt="Summer Sandal">
+        <div class="img-overlay"></div>
+      </div>
+      <div class="product-info">
+        <h3 class="p-name">Summer Sandal</h3>
+        <p class="p-sub">SEASONAL · BREATHABLE</p>
+        <p class="p-price">$135</p>
+        <button class="p-add" onclick="addToCart(6)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Shopping Cart Data
+  let cart = [];
+
+  // DOM Elements
+  const cartModal = document.getElementById('cartModal');
+  const cartOverlay = document.getElementById('cartOverlay');
+  const cartClose = document.getElementById('cartClose');
+  const cartBag = document.querySelector('.nav-bag');
+  const cartItems = document.getElementById('cartItems');
+  const cartTotal = document.getElementById('cartTotal');
+  const cartContinue = document.getElementById('cartContinue');
+  const cartCheckout = document.getElementById('cartCheckout');
+  const successMessage = document.getElementById('successMessage');
+
+  // Product Data
+  const products = [
+    { id: 1, name: 'Altitude Heel', price: 245, image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&q=80' },
+    { id: 2, name: 'Classic Pump', price: 189, image: 'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80' },
+    { id: 3, name: 'Sport Luxe', price: 225, image: 'https://images.unsplash.com/photo-1556906781-9a412961a28b?w=900&q=80' },
+    { id: 4, name: 'Ballet Flat', price: 159, image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=600&q=80' },
+    { id: 5, name: 'Designer Boot', price: 329, image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80' },
+    { id: 6, name: 'Summer Sandal', price: 135, image: 'https://images.unsplash.com/photo-1571559372703-299cb2687b27?w=600&q=80' }
+  ];
+
+  // Cart Functions
+  function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+      existingItem.quantity++;
+    } else {
+      cart.push({ ...product, quantity: 1 });
+    }
+    
+    updateCart();
+    showSuccessMessage('Product added to cart!');
+  }
+
+  function removeFromCart(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCart();
+  }
+
+  function updateQuantity(productId, change) {
+    const item = cart.find(item => item.id === productId);
+    if (item) {
+      item.quantity += change;
+      if (item.quantity <= 0) {
+        removeFromCart(productId);
+      } else {
+        updateCart();
+      }
+    }
+  }
+
+  function updateCart() {
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    cartBag.textContent = `Bag (${totalItems})`;
+    
+    if (cart.length === 0) {
+      cartItems.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+    } else {
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}">
+          <div class="cart-item-details">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">$${item.price}</div>
+            <div class="cart-item-quantity">
+              <button class="quantity-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+              <span class="quantity-display">${item.quantity}</span>
+              <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+            </div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart(${item.id})">Remove</button>
+        </div>
+      `).join('');
+    }
+    
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotal.textContent = `$${total}`;
+  }
+
+  function openCart() {
+    cartModal.classList.add('active');
+    cartOverlay.classList.add('active');
+  }
+
+  function closeCart() {
+    cartModal.classList.remove('active');
+    cartOverlay.classList.remove('active');
+  }
+
+  function showSuccessMessage(message) {
+    successMessage.textContent = message;
+    successMessage.classList.add('show');
+    setTimeout(() => {
+      successMessage.classList.remove('show');
+    }, 3000);
+  }
+
+  // Event Listeners
+  cartBag.addEventListener('click', openCart);
+  cartClose.addEventListener('click', closeCart);
+  cartOverlay.addEventListener('click', closeCart);
+  cartContinue.addEventListener('click', closeCart);
+  cartCheckout.addEventListener('click', () => {
+    window.location.href = 'shoes-store.html';
+  });
+
+  // Cursor functionality
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'; });
+  (function anim(){ rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim); })();
+  document.querySelectorAll('a,button,.product-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ cursor.style.width='18px';cursor.style.height='18px';ring.style.width='54px';ring.style.height='54px'; });
+    el.addEventListener('mouseleave',()=>{ cursor.style.width='10px';cursor.style.height='10px';ring.style.width='36px';ring.style.height='36px'; });
+  });
+
+  // Initialize cart
+  updateCart();
+</script>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <span class="f-logo">SOLÉ</span>
+      <p class="f-tagline">Where every step is a masterpiece. Crafted for those who walk with purpose and dress with intention.</p>
+    </div>
+    <div>
+      <div class="f-heading">Shop</div>
+      <ul class="f-links">
+        <li><a href="shoes-store.html">New Arrivals</a></li><li><a href="mens.html">Men's</a></li>
+        <li><a href="womens.html">Women's</a></li><li><a href="shop.html">Limited Drops</a></li><li><a href="shop.html">Sale</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-heading">Help</div>
+      <ul class="f-links">
+        <li><a href="contact.html">Size Guide</a></li><li><a href="contact.html">Shipping Info</a></li>
+        <li><a href="contact.html">Returns</a></li><li><a href="contact.html">Track Order</a></li><li><a href="contact.html">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-heading">Company</div>
+      <ul class="f-links">
+        <li><a href="about.html">Our Story</a></li><li><a href="about.html">Sustainability</a></li>
+        <li><a href="about.html">Careers</a></li><li><a href="about.html">Press</a></li><li><a href="contact.html">Store Locator</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="f-copy">© 2026 SOLÉ FOOTWEAR. ALL RIGHTS RESERVED.</div>
+    <div class="f-socials">
+      <a href="#">INSTAGRAM</a><a href="#">FACEBOOK</a><a href="#">TIKTOK</a><a href="#">PINTEREST</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

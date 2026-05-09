@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us - SOLÉ Premium Footwear</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --gold: #ffcc00;
+    --red: #ff4444;
+    --grey: #1a1a1a;
+    --light-grey: #cccccc;
+    --bright-gold: #ffdd00;
+    --bright-white: #ffffff;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--white); font-family: 'Cormorant Garamond', serif; overflow-x: hidden; cursor: none; }
+
+  .cursor { width: 10px; height: 10px; background: var(--gold); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
+  .cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(201,168,76,.6); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 24px 64px; background: linear-gradient(to bottom, rgba(10,10,10,.95), transparent); }
+  .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: .35em; color: var(--white); text-decoration: none; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-family: 'Space Mono', monospace; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: var(--bright-white); text-decoration: none; transition: color .3s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-bag { font-family: 'Space Mono', monospace; font-size: .65rem; letter-spacing: .15em; color: var(--black); background: var(--gold); border: none; padding: 10px 24px; cursor: none; font-weight: 700; transition: background .3s; }
+  .nav-bag:hover { background: var(--white); }
+
+  .hero { height: 40vh; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .hero-bg { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=80'); background-size: cover; background-position: center; }
+  .hero-overlay { position: absolute; inset: 0; background: rgba(10,10,10,.7); }
+  .hero-content { position: relative; z-index: 2; text-align: center; }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem,6vw,5rem); letter-spacing: .04em; color: var(--white); margin-bottom: 16px; }
+  .hero-subtitle { font-size: 1.2rem; color: var(--bright-white); max-width: 600px; margin: 0 auto; }
+
+  .contact-section { padding: 100px 64px; max-width: 1200px; margin: 0 auto; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 80px; }
+  .contact-info { padding: 40px; background: var(--grey); border-radius: 8px; }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem,4vw,2.5rem); letter-spacing: .04em; color: var(--gold); margin-bottom: 30px; }
+  .contact-item { margin-bottom: 30px; }
+  .contact-label { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bright-white); margin-bottom: 8px; }
+  .contact-value { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--white); }
+  .contact-value a { color: var(--gold); text-decoration: none; transition: color 0.3s; }
+  .contact-value a:hover { color: var(--bright-gold); }
+
+  .contact-form { padding: 40px; background: var(--grey); border-radius: 8px; }
+  .form-group { margin-bottom: 24px; }
+  .form-label { display: block; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bright-white); margin-bottom: 8px; }
+  .form-input, .form-textarea { width: 100%; padding: 14px; background: var(--black); border: 1px solid #333; color: var(--white); font-family: 'Cormorant Garamond', serif; font-size: 1rem; outline: none; transition: border-color 0.3s; border-radius: 4px; }
+  .form-textarea { min-height: 120px; resize: vertical; }
+  .form-input::placeholder, .form-textarea::placeholder { color: #666; }
+  .form-input:focus, .form-textarea:focus { border-color: var(--gold); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .submit-btn { width: 100%; padding: 16px; background: var(--gold); color: var(--black); border: none; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 700; cursor: pointer; transition: all 0.3s; border-radius: 4px; }
+  .submit-btn:hover { background: var(--bright-white); transform: translateY(-2px); }
+
+  .info-section { padding: 60px 64px; background: var(--grey); }
+  .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; max-width: 1000px; margin: 0 auto; }
+  .info-card { text-align: center; }
+  .info-icon { font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; }
+  .info-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--white); margin-bottom: 12px; }
+  .info-description { font-size: 1rem; line-height: 1.6; color: var(--bright-white); }
+
+  .map-section { padding: 60px 64px; }
+  .map-container { height: 400px; background: var(--grey); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+  .map-placeholder { text-align: center; color: var(--bright-white); }
+  .map-icon { font-size: 3rem; color: var(--gold); margin-bottom: 16px; }
+
+  /* Success Message */
+  .success-message { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--gold); color: var(--black); padding: 24px 32px; border-radius: 8px; font-family: 'Space Mono', monospace; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; z-index: 3000; display: none; box-shadow: 0 10px 40px rgba(255,204,0,0.4); }
+  .success-message.show { display: block; animation: successPulse 0.5s ease; }
+
+  /* WhatsApp Button */
+  .whatsapp-float { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background: #25D366; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1000; box-shadow: 0 4px 20px rgba(37,211,102,0.4); transition: all 0.3s; text-decoration: none; }
+  .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(37,211,102,0.6); }
+  .whatsapp-icon { width: 30px; height: 30px; fill: white; }
+
+  @keyframes successPulse {
+    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.05); }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; } .nav-links { display: none; }
+    .hero { height: 35vh; }
+    .contact-section { padding: 60px 24px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact-info, .contact-form { padding: 30px; }
+    .info-section { padding: 40px 24px; }
+    .map-section { padding: 40px 24px; }
+    .form-row { grid-template-columns: 1fr; gap: 0; }
+    .cursor, .cursor-ring { display: none; }
+    body { cursor: auto; }
+    button, a { cursor: pointer; }
+  }
+
+  @media (max-width: 600px) {
+    .hero-title { font-size: clamp(2.5rem,8vw,4rem); }
+    .contact-section { padding: 40px 16px; }
+    .contact-info, .contact-form { padding: 20px; }
+    .info-section { padding: 30px 16px; }
+    .map-section { padding: 30px 16px; }
+    .map-container { height: 300px; }
+    .whatsapp-float { bottom: 20px; right: 20px; width: 50px; height: 50px; }
+    .whatsapp-icon { width: 25px; height: 25px; }
+    
+    /* Footer Mobile Styles */
+    footer { padding: 40px 16px 20px; }
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    .f-logo { font-size: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+  }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; padding-bottom: 60px; border-bottom: 1px solid #1a1a1a; }
+  .f-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: .3em; color: var(--white); display: block; margin-bottom: 16px; }
+  .f-tagline { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1rem; color: var(--bright-white); line-height: 1.8; }
+  .f-heading { font-family: 'Space Mono', monospace; font-size: .58rem; letter-spacing: .3em; color: var(--gold); text-transform: uppercase; margin-bottom: 22px; }
+  .f-links { list-style: none; }
+  .f-links li { margin-bottom: 11px; }
+  .f-links a { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--bright-white); text-decoration: none; transition: color .3s; }
+  .f-links a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 36px; }
+  .f-copy { font-family: 'Space Mono', monospace; font-size: .55rem; letter-spacing: .15em; color: var(--bright-white); }
+  .f-socials { display: flex; gap: 22px; }
+  .f-socials a { font-family: 'Space Mono', monospace; font-size: .55rem; letter-spacing: .15em; color: var(--bright-white); text-decoration: none; transition: color .3s; }
+  .f-socials a:hover { color: var(--gold); }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Success Message -->
+<div class="success-message" id="successMessage">
+  Message sent successfully!
+</div>
+
+<!-- WhatsApp Button -->
+<a href="https://wa.me/923148905818" target="_blank" class="whatsapp-float">
+  <svg class="whatsapp-icon" viewBox="0 0 24 24">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414-.074-.123-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</a>
+
+<nav>
+  <a href="shoes-store.html" class="nav-logo">SOLÉ</a>
+  <ul class="nav-links">
+    <li><a href="mens.html">Men</a></li>
+    <li><a href="womens.html">Women</a></li>
+    <li><a href="shop.html">Shop</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <button class="nav-bag">Bag (0)</button>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">CONTACT US</h1>
+    <p class="hero-subtitle">We're here to help. Reach out to us for any questions or support.</p>
+  </div>
+</section>
+
+<section class="contact-section">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <h2 class="section-title">GET IN TOUCH</h2>
+      
+      <div class="contact-item">
+        <div class="contact-label">Phone</div>
+        <div class="contact-value">
+          <a href="tel:+923148905818">+92 314 890 5818</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-label">WhatsApp</div>
+        <div class="contact-value">
+          <a href="https://wa.me/923148905818" target="_blank">+92 314 890 5818</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-label">Email</div>
+        <div class="contact-value">
+          <a href="mailto:info@solefootwear.com">info@solefootwear.com</a>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-label">Address</div>
+        <div class="contact-value">
+          123 Fashion Street<br>
+          Gulberg, Lahore<br>
+          Pakistan 54000
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-label">Business Hours</div>
+        <div class="contact-value">
+          Monday - Friday: 9:00 AM - 8:00 PM<br>
+          Saturday: 10:00 AM - 6:00 PM<br>
+          Sunday: Closed
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form">
+      <h2 class="section-title">SEND US A MESSAGE</h2>
+      <form id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" class="form-input" id="firstName" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" class="form-input" id="lastName" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-input" id="email" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" id="phone">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <input type="text" class="form-input" id="subject" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-textarea" id="message" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Send Message</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="info-section">
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-icon">🚚</div>
+      <h3 class="info-title">FREE SHIPPING</h3>
+      <p class="info-description">Free shipping on all orders over $100 within Pakistan. International shipping available.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">↩️</div>
+      <h3 class="info-title">EASY RETURNS</h3>
+      <p class="info-description">30-day return policy. Easy and hassle-free returns on all products.</p>
+    </div>
+    <div class="info-card">
+      <div class="info-icon">💬</div>
+      <h3 class="info-title">24/7 SUPPORT</h3>
+      <p class="info-description">Our customer service team is available round the clock to assist you.</p>
+    </div>
+  </div>
+</section>
+
+<section class="map-section">
+  <div class="map-container">
+    <div class="map-placeholder">
+      <div class="map-icon">📍</div>
+      <h3>Visit Our Store</h3>
+      <p>123 Fashion Street, Gulberg, Lahore</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // DOM Elements
+  const contactForm = document.getElementById('contactForm');
+  const successMessage = document.getElementById('successMessage');
+
+  function showSuccessMessage(message) {
+    successMessage.textContent = message;
+    successMessage.classList.add('show');
+    setTimeout(() => {
+      successMessage.classList.remove('show');
+    }, 3000);
+  }
+
+  // Form submission
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const formData = {
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      subject: document.getElementById('subject').value,
+      message: document.getElementById('message').value
+    };
+    
+    // Simulate form submission
+    console.log('Contact form submitted:', formData);
+    
+    // Show success message
+    showSuccessMessage('Message sent successfully! We will contact you soon.');
+    
+    // Reset form
+    contactForm.reset();
+  });
+
+  // Cursor functionality
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{ mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'; });
+  (function anim(){ rx+=(mx-rx)*.13;ry+=(my-ry)*.13;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim); })();
+  document.querySelectorAll('a,button,.info-card,.contact-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ cursor.style.width='18px';cursor.style.height='18px';ring.style.width='54px';ring.style.height='54px'; });
+    el.addEventListener('mouseleave',()=>{ cursor.style.width='10px';cursor.style.height='10px';ring.style.width='36px';ring.style.height='36px'; });
+  });
+</script>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <span class="f-logo">SOLÉ</span>
+      <p class="f-tagline">Where every step is a masterpiece. Crafted for those who walk with purpose and dress with intention.</p>
+    </div>
+    <div>
+      <div class="f-heading">Shop</div>
+      <ul class="f-links">
+        <li><a href="#">New Arrivals</a></li><li><a href="#">Men's</a></li>
+        <li><a href="#">Women's</a></li><li><a href="#">Limited Drops</a></li><li><a href="#">Sale</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-heading">Help</div>
+      <ul class="f-links">
+        <li><a href="#">Size Guide</a></li><li><a href="#">Shipping Info</a></li>
+        <li><a href="#">Returns</a></li><li><a href="#">Track Order</a></li><li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="f-heading">Company</div>
+      <ul class="f-links">
+        <li><a href="#">Our Story</a></li><li><a href="#">Sustainability</a></li>
+        <li><a href="#">Careers</a></li><li><a href="#">Press</a></li><li><a href="#">Store Locator</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="f-copy">© 2026 SOLÉ FOOTWEAR. ALL RIGHTS RESERVED.</div>
+    <div class="f-socials">
+      <a href="#">INSTAGRAM</a><a href="#">FACEBOOK</a><a href="#">TIKTOK</a><a href="#">PINTEREST</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
